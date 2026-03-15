@@ -1,0 +1,911 @@
+<!-- BiTS UK Fellows — Squarespace Embed -->
+<!-- INSTRUCTIONS:
+     1. Paste this entire block into a Squarespace Code Block
+     2. Images and PDFs are served from GitHub (github.com/realfids/bits)
+     3. To add new cohorts: copy a card template, change data-cohort="2", fill in details
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+.bits-fellows {
+  --bits-accent: #c45c2a;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: inherit;
+  line-height: 1.6;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.bits-fellows__heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin: 0 0 2rem;
+  line-height: 1;
+}
+
+.bits-fellows__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+.bits-fellows__filter-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-right: 0.25rem;
+  opacity: 0.7;
+}
+
+.bits-fellows__pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0.7;
+}
+
+.bits-fellows__pill:hover {
+  opacity: 1;
+  border-color: rgba(0,0,0,0.25);
+}
+
+.bits-fellows__pill--active {
+  background: var(--bits-accent);
+  color: #fff;
+  border-color: var(--bits-accent);
+  opacity: 1;
+}
+
+.bits-fellows__count {
+  font-size: 0.82rem;
+  opacity: 0.5;
+  padding: 0.5rem 0 1rem;
+}
+
+.bits-fellows__empty {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+  opacity: 0.5;
+  font-size: 0.95rem;
+}
+
+.bits-fellows__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem 2rem;
+  align-items: start;
+}
+
+.bits-fellows__card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.bits-fellows__card-top {
+  display: block;
+  padding: 0;
+}
+
+.bits-fellows__card-top img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.bits-fellows__card:hover .bits-fellows__card-top img {
+  opacity: 0.85;
+}
+
+.bits-fellows__name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  margin: 1rem 0 0.15rem;
+}
+
+.bits-fellows__affiliation {
+  font-size: 0.82rem;
+  opacity: 0.55;
+  display: block;
+}
+
+.bits-fellows__tags {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.bits-fellows__tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.06);
+  color: inherit;
+  opacity: 0.55;
+}
+
+.bits-fellows__card-body {
+  padding: 0.5rem 0 0;
+}
+
+.bits-fellows__programme {
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-bottom: 0.3rem;
+  opacity: 0.8;
+}
+
+.bits-fellows__programme-sub {
+  font-weight: 300;
+}
+
+.bits-fellows__summary {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.bits-fellows__card-footer {
+  padding: 0.75rem 0 0;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.bits-fellows__card-footer a {
+  font-size: 0.8rem;
+  color: var(--bits-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.bits-fellows__card-footer a:hover {
+  text-decoration: underline;
+}
+
+.bits-fellows__sep {
+  opacity: 0.3;
+}
+
+.bits-fellows__bio-toggle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--bits-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+}
+
+.bits-fellows__bio-toggle:hover {
+  text-decoration: underline;
+}
+
+.bits-fellows__bio {
+  display: none;
+  font-size: 0.83rem;
+  opacity: 0.6;
+  line-height: 1.55;
+  padding: 0.6rem 0 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  margin-top: 0.6rem;
+}
+
+.bits-fellows__bio--open {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .bits-fellows__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .bits-fellows__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+</style>
+
+<div class="bits-fellows">
+
+  <h1 class="bits-fellows__heading">Fellows</h1>
+
+  <!-- Filter Bar -->
+  <div class="bits-fellows__filters">
+    <span class="bits-fellows__filter-label">Programme:</span>
+    <button class="bits-fellows__pill bits-fellows__pill--active" data-filter="programme" data-value="all">All</button>
+    <button class="bits-fellows__pill" data-filter="programme" data-value="aria">ARIA</button>
+    <button class="bits-fellows__pill" data-filter="programme" data-value="sprind">SPRIND</button>
+    <button class="bits-fellows__pill" data-filter="programme" data-value="americas">Americas</button>
+  </div>
+  <div class="bits-fellows__filters" style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-top: 0;">
+    <span class="bits-fellows__filter-label">Year:</span>
+    <button class="bits-fellows__pill bits-fellows__pill--active" data-filter="year" data-value="all">All</button>
+    <button class="bits-fellows__pill" data-filter="year" data-value="2025">2025</button>
+    <button class="bits-fellows__pill" data-filter="year" data-value="2026">2026</button>
+  </div>
+
+  <div class="bits-fellows__count"></div>
+  <div class="bits-fellows__empty">No fellows match the selected filter.</div>
+
+  <!-- Card Grid -->
+  <div class="bits-fellows__grid">
+
+    <!-- ========== COHORT 1 ========== -->
+
+    <!-- Roslyn Bill -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/roslyn-bill.jpg" alt="Roslyn Bill" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Roslyn Bill</h2>
+          <span class="bits-fellows__affiliation">Aston University</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">FLOWCODE <span class="bits-fellows__programme-sub">&mdash; Tuning CNS Fluid Logistics</span></div>
+        <p class="bits-fellows__summary">Mapping the brain&rsquo;s plumbing system to identify the valves that control CNS fluid flow, developing a &ldquo;statin-for-the-brain&rdquo; framework to halt swelling and delay neurodegeneration &mdash; moving beyond symptom management to target root causes, with potential to reduce the global burden of Alzheimer&rsquo;s and Parkinson&rsquo;s.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/roslyn-bill.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Roslyn Bill is Aston University's 50th Anniversary Professor of Biotechnology. She obtained her degrees in Chemistry from Oxford University and is an international authority on aquaporin (AQP) water channels. Her team discovered how water enters the brain after injury through AQP4 and identified a licensed medicine that can prevent it. She was awarded an ERC Advanced Grant in 2023 and is a founding member of the AQP sub-committee of IUPHAR/Guide to Pharmacology.</p>
+      </div>
+    </article>
+
+    <!-- Jo Melville -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/jonathan-melville.jpeg" alt="Jo Melville" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Jo Melville</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Primordial Deep Tech</div>
+        <p class="bits-fellows__summary">Standing up a testbed consortium to systematically interrogate the geology&ndash;microbiome correlation in the deep subsurface for the first time &mdash; advancing from blind trial-and-error to predictive modelling, with cross-cutting implications for energy, carbon sequestration, remediation and subsurface biomanufacturing.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/jonathan-melville.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Jo Melville was a Fellow in the US Department of Energy from 2021&ndash;2024, first at the Solar Energy Technologies Office and subsequently at ARPA-E, where he developed and managed over $100 million in high-risk grants for carbon-neutral steel production, synthetic fuels and geologic hydrogen. He holds a PhD in chemistry from MIT and a bachelor's degree from UC Berkeley.</p>
+      </div>
+    </article>
+
+    <!-- Sven Truckenbrodt -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/sven-truckenbrodt.jpg" alt="Sven Truckenbrodt" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Sven Truckenbrodt</h2>
+          <span class="bits-fellows__affiliation">MRC Laboratory of Molecular Biology</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Mapping the Molecular Brain <span class="bits-fellows__programme-sub">&mdash; A New Science of Computation</span></div>
+        <p class="bits-fellows__summary">Decoding the brain&rsquo;s molecular computational architecture to create blueprints for radically more efficient hardware &mdash; building a BBN/MOSIS-style centre for scalable molecular brain mapping via expansion microscopy, enabling a new science of computation grounded in the molecular logic of the brain.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/sven-truckenbrodt.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Sven Truckenbrodt's ambition is to understand how the brain's biological hardware produces cognition and consciousness. He has helped build next-generation brain mapping technology as Lead Scientist Molecular Connectomics at E11 Bio, one of the world's first Focused Research Organizations. He holds a group leader position at the MRC Laboratory of Molecular Biology in Cambridge, UK.</p>
+      </div>
+    </article>
+
+    <!-- Ananth Kumar -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/ananth-kumar.jpeg" alt="Ananth Kumar" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Ananth Kumar</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">PARAGON <span class="bits-fellows__programme-sub">&mdash; Mapping Genomic Dark Matter</span></div>
+        <p class="bits-fellows__summary">Building a comprehensive open RNA resource mapping non-coding RNA structure, chemical modifications, interactions and function &mdash; creating an &ldquo;AlphaFold moment&rdquo; for RNA to discover novel therapeutic targets, decode RNA molecular grammar and uncover circuitry underlying genome evolution.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/ananth-kumar.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Ananth Kumar is an entrepreneurial scientist and policy nerd. He obtained his PhD in Biological Science from the MRC Laboratory of Molecular Biology as a Gates Cambridge Scholar, and was a HFSP long-term fellow at Yale University working on non-coding RNAs. Outside of science, he enjoys cricket, Japanese sword fighting and reading fiction.</p>
+      </div>
+    </article>
+
+    <!-- Karim Brohi -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/karim-brohi.jpg" alt="Karim Brohi" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Karim Brohi</h2>
+          <span class="bits-fellows__affiliation">Queen Mary University of London</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">INTERCEPT <span class="bits-fellows__programme-sub">&mdash; Prehospital Survival Therapeutics</span></div>
+        <p class="bits-fellows__summary">Building a human-anchored discovery engine to map the early innate immunity cascades triggered by inadequate perfusion, developing &ldquo;survival therapeutics&rdquo; deliverable in prehospital settings &mdash; targeting first-in-human proof-of-concept for trauma haemorrhage, with applications across stroke and cardiac emergencies.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/karim-brohi.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Karim Brohi is a trauma surgeon and director of the Centre for Trauma Sciences at Queen Mary University of London. He was a founder of the London Major Trauma System and its director for a decade until May 2025. His research focuses on improving survival after major trauma, focusing on the first minutes and hours after injury.</p>
+      </div>
+    </article>
+
+    <!-- Inga Van den Bossche -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/inga-van-den-bossche.jpg" alt="Inga Van den Bossche" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Inga Van den Bossche</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">PRISM <span class="bits-fellows__programme-sub">&mdash; Programmable RNA for Immune State Modulation</span></div>
+        <p class="bits-fellows__summary">Designing multiplex, conditional RNA therapeutics that deliver multiple modes of action within a single delivery vehicle &mdash; creating an entirely new therapeutic category of drugs designed against immune states rather than individual targets, for autoimmune and immune-mediated inflammatory diseases.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/inga-van-den-bossche.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>A Materials Engineer turned Bioengineer, exploring the intersection of bits and atoms through nucleic acids for therapeutic applications.</p>
+      </div>
+    </article>
+
+    <!-- Alex Araki -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/alex-araki.jpg" alt="Alex Araki" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Alex Araki</h2>
+          <span class="bits-fellows__affiliation">Independent</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Translating Pain <span class="bits-fellows__programme-sub">&mdash; Measuring and Predicting Pelvic Pain</span></div>
+        <p class="bits-fellows__summary">Discovering and clinically validating a non-invasive composite pelvic pain measurement tool combining neurophysiology and molecular markers &mdash; enabling precise diagnosis and treatment matching for women with endometriosis and adenomyosis, targeting MHRA submission as a baseline patient stratifier for Phase 2 trials.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/alex-araki.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Alex S. Araki is a gene therapy and animal scientist dedicated to solving the predictive validity problem in modern drug discovery. Across academia (Yale, UW&ndash;Madison) and industry (Gordian Biotechnology), he has built complex age-related disease models in multiple species and tested thousands of novel AAV therapies. He is now founder of Artemis FRO.</p>
+      </div>
+    </article>
+
+    <!-- Arzhang Ardavan -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/arzhang-ardavan.png" alt="Arzhang Ardavan" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Arzhang Ardavan</h2>
+          <span class="bits-fellows__affiliation">University of Oxford</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">The Bridge to Molecular Technologies</div>
+        <p class="bits-fellows__summary">Building practical devices from individual molecules to enable 100&ndash;1000x more energy-efficient information processing &mdash; proving basic building blocks with two demonstrators (spin-based quantum technologies and a single-molecule biosensor) while establishing the tooling to make them manufacturable.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/arzhang-ardavan.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Arzhang Ardavan completed his BA and D.Phil at Corpus Christi College, Oxford, in experimental condensed matter physics. He held a Royal Society University Research Fellowship from 2003 to 2012 and has been Professor in Physics at Oxford since 2015. His multidisciplinary research combines physics with strong collaborations in chemistry and world-leading research activities internationally.</p>
+      </div>
+    </article>
+
+    <!-- Nazila Kamaly -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/nazila-kamaly.jpeg" alt="Nazila Kamaly" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Nazila Kamaly</h2>
+          <span class="bits-fellows__affiliation">Imperial College London</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">NEURON <span class="bits-fellows__programme-sub">&mdash; Non-Viral Gene Therapy Across the Blood&ndash;Brain Barrier</span></div>
+        <p class="bits-fellows__summary">Developing the first systemic, non-viral, biodegradable nanoparticle platforms capable of crossing the blood&ndash;brain barrier to deliver curative genetic payloads for rare paediatric brain diseases &mdash; removing the need for neurosurgery and targeting IND/CTA submission for two candidates by Year 5.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/nazila-kamaly.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Dr Nazila Kamaly is an Associate Professor in Chemistry at Imperial College London. She held postdoctoral and instructor positions at MIT and Harvard Medical School. She leads a multidisciplinary research group developing bioinspired nanomaterials for targeted drug delivery. With over 100 publications, 14,000 citations and an h-index of 33, she has a proven track record in securing cross-sector collaborations.</p>
+      </div>
+    </article>
+
+    <!-- Dean Thomas -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/dean-thomas.png" alt="Dean Thomas" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Dean Thomas</h2>
+          <span class="bits-fellows__affiliation">University of Glasgow</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">CATALYSE <span class="bits-fellows__programme-sub">&mdash; A National Platform for Chemical Automation</span></div>
+        <p class="bits-fellows__summary">Establishing a national &ldquo;printing press for chemistry&rdquo; platform where researchers submit digital experimental designs for automated execution &mdash; generating standardised, reproducible datasets to power next-generation AI models and closed-loop science, positioning the UK at the forefront of autonomous chemical research.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/dean-thomas.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Dean is a Research Fellow at the University of Glasgow specialising in Digital Chemistry. He completed his PhD at the University of Manchester, focusing on fuelled artificial molecular machines. Since joining the Cronin Group, he has developed autonomous synthesis platforms, prioritising safe handling of hazardous materials and integration into fully automated chemical manufacturing workflows.</p>
+      </div>
+    </article>
+
+    <!-- Agata Nyga -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/agata-nyga.jpeg" alt="Agata Nyga" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Agata Nyga</h2>
+          <span class="bits-fellows__affiliation">SynLaia Innovations</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">LUNG-MECH <span class="bits-fellows__programme-sub">&mdash; The Lung Mechanomics Initiative</span></div>
+        <p class="bits-fellows__summary">Creating the first physics-informed lung atlas linking tissue mechanics to molecular signatures at population scale &mdash; enabling early detection of chronic lung diseases decades before irreversible damage, and unlocking a new therapeutic class of mechanotherapeutics for COPD, fibrosis and cancer.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/agata-nyga.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Agata Nyga, PhD, is an academic-turned-entrepreneur with over 15 years of experience in bioengineering and mechanobiology. She has led research projects at leading international institutions and authored more than 30 peer-reviewed publications. She is now CEO and Founder of SynLaia Innovations, developing a platform for mapping and modulating the mechanical states of cells and tissues.</p>
+      </div>
+    </article>
+
+    <!-- Artem Mishchenko -->
+    <article class="bits-fellows__card" data-programme="aria" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/artem-mishchenko.jpg" alt="Artem Mishchenko" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Artem Mishchenko</h2>
+          <span class="bits-fellows__affiliation">University of Manchester</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">ARIA</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Quantum Materials Discovery Catalyst (qdisc)</div>
+        <p class="bits-fellows__summary">Building the world's first ImageNet-scale experimental dataset for quantum materials, powered by an autonomous AI-robotics foundry. Combines a multi-agent AI prediction engine, a robotic lab and an open database to boost data generation by 1000x and produce over 1 million datapoints in three years.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <span style="font-size:0.82rem; opacity:0.5;">Concept Note (coming soon)</span>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Artem Mishchenko is a condensed matter physicist at the University of Manchester. He studies quantum effects in atomically thin materials, combining advanced experiments with AI to rapidly discover new electronic, magnetic and optical properties.</p>
+      </div>
+    </article>
+
+    <!-- ========== SPRIND 2025 ========== -->
+
+    <!-- Jan Jedryszek -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/jan-jedryszek.jpg" alt="Jan Jedryszek" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Jan Jedryszek</h2>
+          <span class="bits-fellows__affiliation">Technical University of Munich</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Biotic <span class="bits-fellows__programme-sub">&mdash; An Operating System for Life</span></div>
+        <p class="bits-fellows__summary">Assembling synthetic cells into prototissues and enabling their molecular communication across vascular networks &mdash; creating a programmable biological platform that bridges cell engineering, biosensing and real-time intracellular monitoring.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <span style="font-size:0.82rem; opacity:0.5;">Documents on request</span>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Jan Jedryszek is a PhD student in Physics at the Technical University of Munich and the Max Planck School Matter to Life. His research focuses on assembling synthetic cells into prototissues and enabling their molecular communication across vascular networks. He cofounded Aster Bioelectronics and was part of Evolvere Biosciences (YC S24). Previously, he worked at the European Space Agency (ESA), developing biological mining methods for Martian and Lunar regolith. He is a 2025 O&rsquo;Shaughnessy Ventures Fellow.</p>
+      </div>
+    </article>
+
+    <!-- Shahaf Peleg -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/shahaf-peleg.jpg" alt="Shahaf Peleg" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Shahaf Peleg</h2>
+          <span class="bits-fellows__affiliation">FBN Dummerstorf</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Light-Powered Mitochondria <span class="bits-fellows__programme-sub">&mdash; Breaking the Human Lifespan Barrier</span></div>
+        <p class="bits-fellows__summary">Engineering metazoans to harness the energy of light and translate it to chemical energy in their mitochondria &mdash; a radical approach to extending healthy lifespan by fundamentally altering basic metabolism and breaking the human 120-year lifespan barrier.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/shahaf-peleg.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Shahaf Peleg received his PhD from the University of G&ouml;ttingen, where he was part of the International Max Planck Research School of Neuroscience. His laboratory at the FBN Dummerstorf seeks to better understand the molecular changes associated with the progression of aging. He is co-founder of Luminova Biotech and an advisor to the Thalion initiative.</p>
+      </div>
+    </article>
+
+    <!-- Jerome Unidad -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/jerome-unidad.jpg" alt="Jerome Unidad" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Jerome Unidad</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Autonomous Orbital Bioreactors <span class="bits-fellows__programme-sub">&mdash; Mass Bioproduction in Earth&rsquo;s Orbit</span></div>
+        <p class="bits-fellows__summary">Developing autonomous bioreactor systems for micro-gravity bioproduction &mdash; leveraging the unique conditions of low Earth orbit to manufacture high-value biologics at scale, bridging frontier space infrastructure and industrial biotechnology.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/jerome-unidad.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Jerome Unidad, PhD, is a technologist-entrepreneur with a career spanning hardware engineering, fluid transport, materials science, applied physics and biotechnology. At Xerox PARC, he developed biomedical devices, biosensors, cleantech and additive manufacturing. As founder of Centeon, he led efforts to develop cost-competitive bioproduction of ammonia. He is now working with Renaissance Philanthropy to advance global capabilities for space biomanufacturing.</p>
+      </div>
+    </article>
+
+    <!-- Joe Meyerowitz -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/joe-meyerowitz.jpg" alt="Joe Meyerowitz" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Joe Meyerowitz</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Engineering Microbial Consortia <span class="bits-fellows__programme-sub">&mdash; Bio-Based Separations at Industrial Scale</span></div>
+        <p class="bits-fellows__summary">Engineering microbial consortia for high-throughput biological separations &mdash; building a bench-to-pilot platform that replaces fossil-derived petrochemicals with bio-based alternatives, delivering order-of-magnitude cost reductions in sustainable chemical manufacturing.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/joe-meyerowitz.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Joe Meyerowitz is an engineer and entrepreneur focused on industrial biotechnology and sustainable manufacturing. His work centres on developing scalable bio-separation platforms that can replace petrochemical feedstocks with bio-based alternatives.</p>
+      </div>
+    </article>
+
+    <!-- Ida Tin -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/ida-tin.jpeg" alt="Ida Tin" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Ida Tin</h2>
+          <span class="bits-fellows__affiliation">Femtech Assembly</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Expos&eacute; <span class="bits-fellows__programme-sub">&mdash; Continuous Real-Time Hormone Monitoring</span></div>
+        <p class="bits-fellows__summary">Building continuous, real-time monitoring of all four key female sex hormones &mdash; creating the sensing infrastructure to transform women&rsquo;s health from reactive symptom management to precise, data-driven care across fertility, menopause and hormonal conditions.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/ida-tin.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Ida Tin is the former CEO and Chair of Clue, the most trusted female health app with over ten million users in 190+ countries. Tin coined the term &ldquo;Femtech&rdquo; in 2016, defining a sector projected to exceed a trillion dollars by 2040. She is now director of Femtech Assembly, a think tank connecting women&rsquo;s health investment to broader economic development.</p>
+      </div>
+    </article>
+
+    <!-- Alexander German -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/alexander-german.jpg" alt="Alexander German" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Alexander German</h2>
+          <span class="bits-fellows__affiliation">University of Erlangen&ndash;Nuremberg</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Medical Hibernation Challenge <span class="bits-fellows__programme-sub">&mdash; Reversible Human Dormancy</span></div>
+        <p class="bits-fellows__summary">Supercharging the development of techniques for safely inducing dormancy states &mdash; from natural hibernation strategies and cryopreservation by vitrification to hypothermia and hypometabolism, with applications in emergency medicine, organ transplantation and space exploration.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/alexander-german.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Alex is a clinician-scientist at University Erlangen&ndash;Nuremberg exploring medical hibernation. He has initiated research on cryopreservation of the nervous system, resulting in the first report of near-physiological recovery of adult mouse hippocampus after vitrification. He is also advancing translation as a founder of Hiber. His background spans medicine, neurology, medical imaging and mathematics.</p>
+      </div>
+    </article>
+
+    <!-- Antonia Schmalz -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/antonia-schmalz.jpg" alt="Antonia Schmalz" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Antonia Schmalz</h2>
+          <span class="bits-fellows__affiliation">SPRIND</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Fusion Market Shaping <span class="bits-fellows__programme-sub">&mdash; Accelerating the Path to Commercial Fusion Energy</span></div>
+        <p class="bits-fellows__summary">Designing market-shaping mechanisms to accelerate the commercialisation of nuclear fusion &mdash; building the funding structures, supply-chain strategies and policy frameworks needed to bridge fusion from breakthrough physics to viable energy infrastructure.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <span style="font-size:0.82rem; opacity:0.5;">Documents on request</span>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Antonia Schmalz works at SPRIND, the German Federal Agency for Disruptive Innovation. Her work focuses on market shaping for nuclear fusion, designing mechanisms to bridge the gap between breakthrough physics and commercial energy deployment.</p>
+      </div>
+    </article>
+
+    <!-- Vasyl Mykytiuk -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/vasyl-mykytiuk.jpeg" alt="Vasyl Mykytiuk" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Vasyl Mykytiuk</h2>
+          <span class="bits-fellows__affiliation">Francis Crick Institute</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Synthetic Biological Intelligence <span class="bits-fellows__programme-sub">&mdash; Living Neural Processors for Adaptive Computing</span></div>
+        <p class="bits-fellows__summary">Pioneering structured, trainable biological processors inspired by brain circuits &mdash; creating a new paradigm for energy-efficient, adaptive computing with applications in autonomous robotics, next-generation AI and adaptive control across industries.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/vasyl-mykytiuk.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Vasyl is a neuroscientist at The Francis Crick Institute in London, where his research explores how neural circuits integrate sensory information and motivational states to drive behaviour. He holds an MSc in Neuroscience from the International Max Planck Research School in G&ouml;ttingen and a PhD from UCL and the Crick. Beyond the lab, Vasyl leads the Crick Science Entrepreneur Network, a 3,800-strong community connecting scientists, founders, investors and corporates across the UK.</p>
+      </div>
+    </article>
+
+    <!-- Achim Harzheim -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/achim-harzheim.jpg" alt="Achim Harzheim" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Achim Harzheim</h2>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Molecular Transducers <span class="bits-fellows__programme-sub">&mdash; Turning Biology into Electronic Signals</span></div>
+        <p class="bits-fellows__summary">Establishing universal methods for translating complex biological states into precise, electronically readable signals &mdash; combining engineered proteins with semiconductor platforms to create direct-readout biosensing technology for drug discovery and diagnostics.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/achim-harzheim.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Achim is a scientist working at the intersection of physics and biotechnology. Following a PhD studying nanoscale thermoelectric phenomena, he developed MEMS sensors and resonators, then joined a startup combining engineered proteins with a semiconductor platform for direct-readout biosensing. He currently works with super resolution microscopy to map protein interactions and aggregation in the cell for drug discovery.</p>
+      </div>
+    </article>
+
+    <!-- Anna-Lena Schindl -->
+    <article class="bits-fellows__card" data-programme="sprind" data-year="2025">
+      <div class="bits-fellows__card-top">
+        <img src="https://bits-renphil.github.io/fellows/headshots/anna-lena-schindl.jpg" alt="Anna-Lena Schindl" loading="lazy">
+        <div>
+          <h2 class="bits-fellows__name">Anna-Lena Schindl</h2>
+          <span class="bits-fellows__affiliation">Positron Ventures</span>
+          <div class="bits-fellows__tags">
+            <span class="bits-fellows__tag">SPRIND</span>
+            <span class="bits-fellows__tag">2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="bits-fellows__card-body">
+        <div class="bits-fellows__programme">Seeds <span class="bits-fellows__programme-sub">&mdash; Redesigning How Science Becomes Innovation in Europe</span></div>
+        <p class="bits-fellows__summary">Building new institutional models for translating scientific breakthroughs into investable ventures in Continental Europe &mdash; designing metascience experiments and funding structures that close the gap between frontier research and entrepreneurial scale-up.</p>
+      </div>
+      <div class="bits-fellows__card-footer">
+        <a href="https://bits-renphil.github.io/fellows/pdfs/anna-lena-schindl.pdf" target="_blank">Concept Note</a>
+        <span class="bits-fellows__sep">|</span>
+        <button class="bits-fellows__bio-toggle">Bio</button>
+      </div>
+      <div class="bits-fellows__bio">
+        <p>Anna-Lena works with Positron Ventures, assisting scientists in turning breakthroughs into successful companies. After studying physics and working in several early-stage startups, she built the Fraunhofer AHEAD program as a platform for scientists to transform their research into investable startups. She has also been involved in initiatives focused on reimagining the future of higher education.</p>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var root = document.querySelector('.bits-fellows');
+  if (!root) return;
+
+  var filters = { programme: 'all', year: 'all' };
+  var cards = root.querySelectorAll('.bits-fellows__card');
+  var pills = root.querySelectorAll('.bits-fellows__pill');
+  var countEl = root.querySelector('.bits-fellows__count');
+  var emptyEl = root.querySelector('.bits-fellows__empty');
+
+  function applyFilters() {
+    var visible = 0;
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var matchProg = filters.programme === 'all' || card.getAttribute('data-programme') === filters.programme;
+      var matchYear = filters.year === 'all' || card.getAttribute('data-year') === filters.year;
+      var show = matchProg && matchYear;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    }
+    if (countEl) countEl.textContent = 'Showing ' + visible + ' of ' + cards.length + ' fellows';
+    if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  for (var i = 0; i < pills.length; i++) {
+    pills[i].addEventListener('click', function() {
+      var filterGroup = this.getAttribute('data-filter');
+      var value = this.getAttribute('data-value');
+      filters[filterGroup] = value;
+      // Update active state within the same filter group
+      var siblings = root.querySelectorAll('.bits-fellows__pill[data-filter="' + filterGroup + '"]');
+      for (var j = 0; j < siblings.length; j++) {
+        siblings[j].classList.remove('bits-fellows__pill--active');
+      }
+      this.classList.add('bits-fellows__pill--active');
+      applyFilters();
+    });
+  }
+
+  root.addEventListener('click', function(e) {
+    var btn = e.target;
+    if (!btn.classList.contains('bits-fellows__bio-toggle')) return;
+    var card = btn.closest('.bits-fellows__card');
+    var bio = card.querySelector('.bits-fellows__bio');
+    bio.classList.toggle('bits-fellows__bio--open');
+    btn.textContent = bio.classList.contains('bits-fellows__bio--open') ? 'Hide Bio' : 'Bio';
+  });
+
+  applyFilters();
+})();
+</script>
