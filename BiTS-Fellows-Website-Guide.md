@@ -1,199 +1,142 @@
 # BiTS Fellows Website — Editor Guide
 
-This guide explains how to add a new fellow, update an existing one, and publish changes to the website. No coding experience is required, but you will need access to two things:
+This guide explains how to add a new fellow, update an existing profile, and publish changes to the website. No coding experience is required.
 
-- **GitHub** — `github.com/bits-renphil/fellows` (where files are stored)
-- **Squarespace** — the BiTS website admin panel
+You will need access to two things:
+
+- **Google Sheet** — the fellows data spreadsheet (ask a team member for the link if you don't have it)
+- **GitHub** — `github.com/bits-renphil/fellows` (where headshots and PDFs are stored)
 
 ---
 
 ## How the directory works
 
-The fellows directory is a single block of HTML code pasted into a Squarespace page. The headshot images and PDF concept notes are stored in the GitHub repository and loaded from there. Every time you want the live website to reflect a change, you edit the HTML file in GitHub and paste the updated version into Squarespace.
+The fellows directory fetches all profile data live from a Google Sheet every time the page loads. This means:
 
-There are three steps to any update:
+- **To change any text** (names, affiliations, bios, summaries) → edit the Google Sheet
+- **To change a headshot or concept note** → upload the file to GitHub, then update the URL in the Google Sheet
+- **You do not need to touch the HTML or Squarespace** for routine updates
 
-1. Upload assets (headshot, PDF) to GitHub
-2. Edit the HTML file in GitHub
-3. Paste the updated HTML into Squarespace
+The page auto-refreshes its data from the sheet — changes are live within seconds of saving.
 
 ---
 
-## Step 1 — Prepare the headshot image
+## Editing the Google Sheet
 
-Squarespace loads images directly from GitHub, so large files will slow the page down noticeably.
+Open the spreadsheet. Each row is one fellow. The columns are:
 
-**Requirements:**
-- Format: JPEG (`.jpg`) — not PNG, not WebP
-- Maximum width or height: 800 pixels
-- File name: `firstname-lastname.jpg`, all lowercase, hyphen-separated (e.g. `roslyn-bill.jpg`)
+| Column | What goes here | Example |
+|---|---|---|
+| **Name** | Fellow's full display name | `Roslyn Bill` |
+| **Affiliation** | Institution or `Independent` | `Aston University` |
+| **Cohort** | Programme identifier — must be one of: `aria`, `sprind`, `americas`, `japan` (lowercase) | `aria` |
+| **Year** | Cohort year | `2025` |
+| **Program Title** | Bold part of the programme label | `FLOWCODE` |
+| **Program Subtitle** | The part after the colon (no colon needed) | `Tuning CNS Fluid Logistics` |
+| **Summary** | 1–2 sentence project description; start with an active verb | `Develops a platform to…` |
+| **Bio** | Full biographical paragraph | — |
+| **Headshot URL** | Full URL to the image on GitHub Pages | `https://bits-renphil.github.io/fellows/headshots/roslyn-bill.jpg` |
+| **Concept Note URL** | Full URL to the PDF on GitHub Pages, OR the text `on request`, OR leave blank | `https://bits-renphil.github.io/fellows/pdfs/roslyn-bill.pdf` |
 
-**On a Mac**, you can resize an image using Preview:
+> **Concept Note URL rules:**
+> - If the PDF is publicly available: paste the full `https://bits-renphil.github.io/...` URL
+> - If available on request only: type `on request`
+> - If there is no concept note: leave the cell blank
+
+Save the sheet after editing — changes go live immediately.
+
+---
+
+## Uploading a headshot to GitHub
+
+Headshot images must be uploaded to the `headshots` folder in the GitHub repository.
+
+### Before uploading — prepare the image
+
+- **Format:** JPEG (`.jpg`) — not PNG, not WebP
+- **Maximum dimension:** 800 px on the longest side
+- **File name:** `firstname-lastname.jpg`, all lowercase, hyphens instead of spaces (e.g. `roslyn-bill.jpg`)
+- **Target file size:** under 200 KB
+
+**On a Mac**, resize with Preview:
 1. Open the image in Preview
 2. Go to **Tools → Adjust Size**
-3. Set width or height to 800 px (whichever is larger), with "Scale proportionally" ticked
-4. Go to **File → Export**, choose JPEG, quality around 75–80%, save
+3. Set the width or height to 800 px (whichever is larger), with "Scale proportionally" ticked
+4. Go to **File → Export**, choose JPEG, quality ~75–80%, save
 
-Aim for a file size under 200 KB. Portrait (square or near-square) crops work best — the grid crops to square automatically, centred near the top of the image.
+The grid crops headshots to a circle. Portrait shots work best — the crop centres near the top of the image (roughly face height).
 
----
+### Upload to GitHub
 
-## Step 2 — Upload assets to GitHub
+1. Go to `github.com/bits-renphil/fellows`
+2. Click into the **`headshots`** folder
+3. Click **Add file → Upload files**
+4. Drag your JPEG onto the page
+5. Click **Commit changes**
 
-Go to `github.com/bits-renphil/fellows`.
-
-### Upload the headshot
-
-1. Click into the **`headshots`** folder
-2. Click **Add file → Upload files**
-3. Drag your JPEG onto the page
-4. Scroll down and click **Commit changes**
-
-### Upload the concept note PDF
-
-1. Go back to the repo root and click into the **`pdfs`** folder
-2. Click **Add file → Upload files**
-3. Drag the PDF onto the page — name it `firstname-lastname.pdf` (e.g. `roslyn-bill.pdf`)
-4. Click **Commit changes**
-
-GitHub takes about 5–10 minutes to make new files publicly accessible. You can check by opening:
+GitHub Pages takes **5–10 minutes** to make new files publicly accessible. You can verify by opening:
 ```
 https://bits-renphil.github.io/fellows/headshots/firstname-lastname.jpg
 ```
 in your browser. If you see the image, it's live.
 
+6. Copy that URL and paste it into the **Headshot URL** column in the Google Sheet.
+
 ---
 
-## Step 3 — Edit the HTML file
+## Uploading a concept note PDF to GitHub
 
-The file you need to edit is **`squarespace-embed.html`** in the root of the repository.
+1. Go to `github.com/bits-renphil/fellows`
+2. Click into the **`pdfs`** folder
+3. Click **Add file → Upload files**
+4. Drag the PDF onto the page — name it `firstname-lastname.pdf` (e.g. `roslyn-bill.pdf`)
+5. Click **Commit changes**
 
-1. Click `squarespace-embed.html` in the repo
-2. Click the **pencil icon** (Edit this file) in the top-right corner
-
-The file contains one block of HTML per fellow, surrounded by a comment that names the person:
-
-```html
-<!-- Roslyn Bill -->
-<article class="bits-fellows__card" data-programme="aria" data-year="2025">
-  ...
-</article>
+Wait 5–10 minutes, then verify:
+```
+https://bits-renphil.github.io/fellows/pdfs/firstname-lastname.pdf
 ```
 
-### Adding a new fellow
-
-Find a card for a fellow in the same programme (ARIA or SPRIND) and copy the entire block from `<!-- Name -->` down to and including `</article>`. Paste it immediately after the last fellow in that programme's section, then update every field (see the field reference below).
-
-**Template to copy and fill in:**
-
-```html
-<!-- FULL NAME -->
-<article class="bits-fellows__card" data-programme="PROGRAMME" data-year="YEAR">
-  <div class="bits-fellows__card-top">
-    <img src="https://bits-renphil.github.io/fellows/headshots/FILENAME.jpg" alt="FULL NAME" loading="lazy">
-    <div>
-      <h2 class="bits-fellows__name">FULL NAME</h2>
-      <span class="bits-fellows__affiliation">INSTITUTION</span>
-      <div class="bits-fellows__tags">
-        <span class="bits-fellows__tag">ARIA or SPRIND</span>
-        <span class="bits-fellows__tag">YEAR</span>
-      </div>
-    </div>
-  </div>
-  <div class="bits-fellows__card-body">
-    <div class="bits-fellows__programme">PROGRAMME TITLE<span class="bits-fellows__programme-sub">: PROGRAMME SUBTITLE</span></div>
-    <p class="bits-fellows__summary">One or two sentences describing the project.</p>
-  </div>
-  <div class="bits-fellows__card-footer">
-    <a href="https://bits-renphil.github.io/fellows/pdfs/FILENAME.pdf" target="_blank">Concept Note</a>
-    <span class="bits-fellows__sep">|</span>
-    <button class="bits-fellows__bio-toggle">Bio</button>
-  </div>
-  <div class="bits-fellows__bio">
-    <p>Biographical paragraph here.</p>
-  </div>
-</article>
-```
-
-### Field reference
-
-| Field | What to put | Example |
-|---|---|---|
-| `data-programme` | Programme identifier, lowercase | `aria` or `sprind` |
-| `data-year` | Cohort year | `2025` or `2026` |
-| `FILENAME` | Lowercase hyphenated name, no spaces | `roslyn-bill` |
-| `alt="..."` | Fellow's full name | `Roslyn Bill` |
-| `bits-fellows__name` | Fellow's display name | `Roslyn Bill` |
-| `bits-fellows__affiliation` | Institution or `Independent` | `Aston University` |
-| `bits-fellows__tag` (×2) | Programme label and year | `ARIA`, `2025` |
-| `bits-fellows__programme` | Programme name — bold part before the colon | `FLOWCODE` |
-| `bits-fellows__programme-sub` | Subtitle after the colon (include the `: ` at the start) | `: Tuning CNS Fluid Logistics` |
-| `bits-fellows__summary` | 1–2 sentence project description | — |
-| PDF `href` | Full GitHub Pages URL to the PDF | `https://bits-renphil.github.io/fellows/pdfs/roslyn-bill.pdf` |
-| `bits-fellows__bio` | Full biographical paragraph | — |
-
-> **If there is no affiliation:** remove the `<span class="bits-fellows__affiliation">...</span>` line entirely.
->
-> **If there is no concept note yet:** remove the `<a href="...">Concept Note</a>` and `<span class="bits-fellows__sep">|</span>` lines, leaving just the Bio button.
->
-> **If the programme has no subtitle:** write just the programme name with no `<span>` tag: `<div class="bits-fellows__programme">Primordial Deep Tech</div>`
-
-### Editing an existing fellow
-
-Find the fellow's block using **Ctrl+F / Cmd+F** and search their name. Make your changes in place. Be careful to keep the opening and closing tags intact — do not delete a `<` or `>` by accident.
+6. Copy that URL and paste it into the **Concept Note URL** column in the Google Sheet.
 
 ---
 
-## Step 4 — Save the file in GitHub
+## Adding a new fellow — checklist
 
-When you are done editing:
-
-1. Scroll to the bottom of the GitHub editor
-2. Leave the commit message as-is or write a short note (e.g. "Add Jerome Unidad")
-3. Click **Commit changes**
-
----
-
-## Step 5 — Paste into Squarespace
-
-The HTML file in GitHub is the source of truth, but the website reads a copy pasted into a Squarespace code block. You need to update that copy every time you commit a change.
-
-1. Go to the GitHub file view (`squarespace-embed.html`), click the **Raw** button
-2. Select all the text (Ctrl+A / Cmd+A) and copy it (Ctrl+C / Cmd+C)
-3. Log in to Squarespace and navigate to the Fellows page
-4. Click **Edit** on the page, then click on the code block containing the fellows directory
-5. Select all the existing content in the code block and delete it
-6. Paste (Ctrl+V / Cmd+V) the new content
-7. Click **Save**, then **Publish**
-
-The changes will be live immediately.
+- [ ] Headshot prepared: JPEG, max 800 px, under 200 KB, named `firstname-lastname.jpg`
+- [ ] Headshot uploaded to `headshots/` in the GitHub repo
+- [ ] Headshot URL verified in browser, then pasted into the Google Sheet
+- [ ] PDF uploaded to `pdfs/` in the GitHub repo (if applicable)
+- [ ] PDF URL pasted into the Google Sheet (or `on request`, or left blank)
+- [ ] New row added to the Google Sheet with all columns filled in
+- [ ] `Cohort` is one of: `aria` / `sprind` / `americas` / `japan` (lowercase)
+- [ ] `Year` is set to the correct cohort year
+- [ ] `Summary` starts with an active verb (e.g. "Develops…", "Builds…", "Investigates…")
 
 ---
 
-## Quick checklist for adding a new fellow
+## Editing an existing fellow
 
-- [ ] Headshot resized to max 800 px and saved as JPEG
-- [ ] Headshot uploaded to `headshots/` in GitHub repo
-- [ ] PDF uploaded to `pdfs/` in GitHub repo
-- [ ] New card block added to `squarespace-embed.html` with all fields filled in
-- [ ] `data-programme` matches the correct filter (`aria` / `sprind`)
-- [ ] `data-year` set to the correct cohort year
-- [ ] Image URL and PDF URL both use `bits-renphil.github.io/fellows/...`
-- [ ] Changes committed in GitHub
-- [ ] Updated HTML pasted into Squarespace code block and published
+Find their row in the Google Sheet, make your changes, and save. No other steps needed.
 
 ---
 
 ## Common mistakes
 
 **The headshot doesn't appear.**
-Check that the filename in the HTML matches exactly what was uploaded to GitHub (including the extension — `.jpg` not `.jpeg` or `.png`). Also wait 5–10 minutes after upload for GitHub Pages to propagate.
+Check that the URL in the Google Sheet matches the filename exactly (including the `.jpg` extension). Also wait 5–10 minutes after upload for GitHub Pages to propagate.
 
 **The filter buttons don't show this fellow.**
-Check the `data-programme` attribute. It must be exactly `aria` or `sprind` (lowercase). If a new programme is added in the future, contact the person who manages the code.
+Check the `Cohort` column. It must be exactly `aria`, `sprind`, `americas`, or `japan` — lowercase, no spaces.
 
-**The page looks broken after editing.**
-You may have accidentally deleted a tag. In the GitHub editor, press **Cancel** to discard your changes, or use the **History** tab on the file to restore a previous version.
+**The concept note link doesn't appear.**
+The URL must start with `https://`. If it starts with `http://` or has a typo, the link won't render. Check the cell value carefully.
 
-**The bio doesn't expand when clicked.**
-The bio button and the bio text must both be present. Check that neither the `<button class="bits-fellows__bio-toggle">` nor the `<div class="bits-fellows__bio">` block was accidentally removed.
+**The bio toggle doesn't work.**
+Make sure the Bio column is not empty. Even a single space will cause it to appear blank when expanded.
+
+---
+
+## Making design changes (advanced)
+
+The visual layout, colours, and filters are controlled by the HTML/CSS file in the GitHub repo (`squarespace-embed.html`). You should not need to change this for routine content updates. If design changes are needed, contact the person managing the code — changes to the HTML file do require pasting the updated version into the Squarespace code block.
