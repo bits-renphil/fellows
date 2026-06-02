@@ -341,19 +341,17 @@
     var progHtml = progTitle;
     if (progSub) progHtml += '<span class="bits-fellows__program-sub">: ' + progSub + '</span>';
 
-    var footerHtml = '';
-    if (pdfUrl.indexOf('http') === 0) {
-      footerHtml = '<a href="' + esc(pdfUrl) + '" target="_blank">Concept Note</a>' +
-                   '<span class="bits-fellows__sep">|</span>';
-    } else if (pdfUrl.toLowerCase().indexOf('request') !== -1) {
-      footerHtml = '<span style="font-size:0.8rem;opacity:0.5">Concept Note on request</span>' +
-                   '<span class="bits-fellows__sep">|</span>';
-    }
-    if (videoUrl.indexOf('http') === 0) {
-      footerHtml += '<a href="' + esc(videoUrl) + '" target="_blank">Video</a>' +
-                    '<span class="bits-fellows__sep">|</span>';
-    }
-    footerHtml += '<button class="bits-fellows__bio-toggle">Bio</button>';
+    var conceptNoteHtml = pdfUrl.indexOf('http') === 0
+      ? '<a href="' + esc(pdfUrl) + '" target="_blank">Concept Note</a>'
+      : '<span style="visibility:hidden">Concept Note</span>';
+    var videoHtml = videoUrl.indexOf('http') === 0
+      ? '<a href="' + esc(videoUrl) + '" target="_blank">Video</a>'
+      : '<span style="visibility:hidden">Video</span>';
+    var footerHtml = conceptNoteHtml +
+      '<span class="bits-fellows__sep">|</span>' +
+      videoHtml +
+      '<span class="bits-fellows__sep">|</span>' +
+      '<button class="bits-fellows__bio-toggle">Bio</button>';
 
     var el = document.createElement('article');
     el.className = 'bits-fellows__card';
