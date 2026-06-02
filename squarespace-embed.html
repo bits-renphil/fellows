@@ -332,7 +332,7 @@
     var year      = r[3] || '';
     var progTitle = r[4] || '', progSub = r[5] || '';
     var summary   = r[6] || '', bio     = r[7] || '';
-    var headshot  = r[8] || '', pdfUrl  = r[9] || '';
+    var headshot  = r[8] || '', pdfUrl  = r[9] || '', videoUrl = r[10] || '';
 
     if (!name) return null;
 
@@ -348,6 +348,10 @@
     } else if (pdfUrl.toLowerCase().indexOf('request') !== -1) {
       footerHtml = '<span style="font-size:0.8rem;opacity:0.5">Concept Note on request</span>' +
                    '<span class="bits-fellows__sep">|</span>';
+    }
+    if (videoUrl.indexOf('http') === 0) {
+      footerHtml += '<a href="' + esc(videoUrl) + '" target="_blank">Video</a>' +
+                    '<span class="bits-fellows__sep">|</span>';
     }
     footerHtml += '<button class="bits-fellows__bio-toggle">Bio</button>';
 
