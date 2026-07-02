@@ -341,17 +341,11 @@
     var progHtml = progTitle;
     if (progSub) progHtml += '<span class="bits-fellows__program-sub">: ' + progSub + '</span>';
 
-    var conceptNoteHtml = pdfUrl.indexOf('http') === 0
-      ? '<a href="' + esc(pdfUrl) + '" target="_blank">Concept Note</a>'
-      : '<span style="visibility:hidden">Concept Note</span>';
-    var videoHtml = videoUrl.indexOf('http') === 0
-      ? '<a href="' + esc(videoUrl) + '" target="_blank">Video</a>'
-      : '<span style="visibility:hidden">Video</span>';
-    var footerHtml = conceptNoteHtml +
-      '<span class="bits-fellows__sep">|</span>' +
-      videoHtml +
-      '<span class="bits-fellows__sep">|</span>' +
-      '<button class="bits-fellows__bio-toggle">Bio</button>';
+    var footerItems = [];
+    if (pdfUrl.indexOf('http') === 0) footerItems.push('<a href="' + esc(pdfUrl) + '" target="_blank">Concept Note</a>');
+    if (videoUrl.indexOf('http') === 0) footerItems.push('<a href="' + esc(videoUrl) + '" target="_blank">Video</a>');
+    footerItems.push('<button class="bits-fellows__bio-toggle">Bio</button>');
+    var footerHtml = footerItems.join('<span class="bits-fellows__sep">|</span>');
 
     var el = document.createElement('article');
     el.className = 'bits-fellows__card';
