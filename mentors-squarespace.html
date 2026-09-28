@@ -1,0 +1,540 @@
+<!-- BiTS Mentors -- Squarespace Embed -->
+<!-- INSTRUCTIONS:
+     1. Paste this entire block into a Squarespace Code Block
+     2. Headshots are served from GitHub (github.com/bits-renphil/mentors)
+     3. Data comes from the published Google Sheet -- set CSV_URL below
+        (Sheet -> File -> Share -> Publish to web -> CSV)
+     4. Columns are matched by HEADER NAME, not position, so you can add or
+        reorder columns in the sheet without touching this code. Required
+        headers: Name | Affiliation | Cohorts | Experience | Bio | Areas | Headshot
+     5. "Cohorts" is the multi-select answer, comma-separated exactly as the
+        form exports it, e.g.  ARIA PDs, SPRIND 2025, Japan 2026
+        Filter pills and year tags are derived automatically from that string.
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+.bits-mentors {
+  --bits-accent: #c45c2a;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: inherit;
+  line-height: 1.6;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.bits-mentors__heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3.5rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem;
+  line-height: 1;
+}
+
+.bits-mentors__program-link {
+  font-size: 0.85rem;
+  margin: 0 0 1.75rem;
+}
+
+.bits-mentors__program-link a {
+  color: var(--bits-accent);
+  text-decoration: none;
+}
+
+.bits-mentors__program-link a:hover {
+  text-decoration: underline;
+}
+
+.bits-mentors__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+  margin-bottom: 0;
+}
+
+.bits-mentors__filter-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-right: 0.25rem;
+  opacity: 0.7;
+}
+
+.bits-mentors__pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0.7;
+}
+
+.bits-mentors__pill:hover {
+  opacity: 1;
+  border-color: rgba(0,0,0,0.25);
+}
+
+.bits-mentors__pill--active {
+  background: var(--bits-accent);
+  color: #fff;
+  border-color: var(--bits-accent);
+  opacity: 1;
+}
+
+.bits-mentors__search {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  padding: 0.4rem 0.9rem;
+  border-radius: 100px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: transparent;
+  color: inherit;
+  min-width: 240px;
+  outline: none;
+}
+
+.bits-mentors__search:focus {
+  border-color: var(--bits-accent);
+}
+
+.bits-mentors__count {
+  font-size: 0.82rem;
+  opacity: 0.5;
+  padding: 0.5rem 0 1rem;
+}
+
+.bits-mentors__empty {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+  opacity: 0.5;
+  font-size: 0.95rem;
+}
+
+.bits-mentors__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem 2rem;
+  align-items: start;
+}
+
+.bits-mentors__card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.bits-mentors__card-top {
+  display: block;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.bits-mentors__card-top img {
+  width: 64%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+}
+
+.bits-mentors__card:hover .bits-mentors__card-top img {
+  opacity: 0.85;
+}
+
+.bits-mentors__name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  margin: 1rem 0 0.15rem;
+}
+
+.bits-mentors__affiliation {
+  font-size: 0.82rem;
+  opacity: 0.55;
+  display: block;
+}
+
+.bits-mentors__tags {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.bits-mentors__tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.06);
+  color: inherit;
+  opacity: 0.55;
+}
+
+.bits-mentors__card-body {
+  padding: 0.5rem 0 0;
+}
+
+.bits-mentors__experience {
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-bottom: 0.3rem;
+  opacity: 0.8;
+}
+
+.bits-mentors__areas {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.bits-mentors__card-footer {
+  padding: 0.75rem 0 0;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.bits-mentors__bio-toggle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--bits-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+}
+
+.bits-mentors__bio-toggle:hover {
+  text-decoration: underline;
+}
+
+.bits-mentors__bio {
+  display: none;
+  font-size: 0.83rem;
+  opacity: 0.6;
+  line-height: 1.55;
+  padding: 0.6rem 0 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  margin-top: 0.6rem;
+}
+
+.bits-mentors__bio--open {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .bits-mentors__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .bits-mentors__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .bits-mentors__search {
+    min-width: 100%;
+  }
+}
+</style>
+
+<div class="bits-mentors">
+
+  <h1 class="bits-mentors__heading">BiTS Mentors</h1>
+  <p class="bits-mentors__program-link"><a href="https://www.renaissancephilanthropy.org/big-if-true-science-accelerator" target="_blank">Learn more about the program</a></p>
+
+  <!-- Filter Bar -->
+  <div class="bits-mentors__filters">
+    <span class="bits-mentors__filter-label">Cohort:</span>
+    <button class="bits-mentors__pill bits-mentors__pill--active" data-filter="program" data-value="all">All</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="aria">ARIA</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="sprind">SPRIND</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="americas">Americas</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="japan">Japan</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="ukri">UKRI</button>
+    <button class="bits-mentors__pill" data-filter="program" data-value="khealth">K-Health</button>
+  </div>
+  <div class="bits-mentors__filters">
+    <span class="bits-mentors__filter-label">Year:</span>
+    <button class="bits-mentors__pill bits-mentors__pill--active" data-filter="year" data-value="all">All</button>
+    <button class="bits-mentors__pill" data-filter="year" data-value="2025">2025</button>
+    <button class="bits-mentors__pill" data-filter="year" data-value="2026">2026</button>
+  </div>
+  <div class="bits-mentors__filters" style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-top: 0;">
+    <span class="bits-mentors__filter-label">Search:</span>
+    <input type="search" class="bits-mentors__search" placeholder="Name, affiliation, or area of expertise" aria-label="Search mentors">
+  </div>
+
+  <div class="bits-mentors__count"></div>
+  <div class="bits-mentors__empty">No mentors match the selected filters.</div>
+
+  <!-- Card Grid -->
+  <div class="bits-mentors__grid">
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaO2BmxltWEHcnVjF7YzBaLpv6zh_cgbGeKYzyNlZMsxylBXfJMYLA51Bm6By7VtF4R0m8x7Ta2wGL/pub?gid=965490016&single=true&output=csv';
+
+  var root = document.querySelector('.bits-mentors');
+  if (!root) return;
+
+  var grid     = root.querySelector('.bits-mentors__grid');
+  var countEl  = root.querySelector('.bits-mentors__count');
+  var emptyEl  = root.querySelector('.bits-mentors__empty');
+  var searchEl = root.querySelector('.bits-mentors__search');
+  var filters  = { program: 'all', year: 'all', q: '' };
+  var cards    = [];
+
+  /* -- CSV parser -- */
+  function parseCSV(text) {
+    var rows = [], row = [], field = '', inQ = false, i = 0;
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    while (i < text.length) {
+      var c = text[i];
+      if (inQ) {
+        if (c === '"') {
+          if (text[i+1] === '"') { field += '"'; i += 2; continue; }
+          inQ = false; i++; continue;
+        }
+        field += c; i++;
+      } else {
+        if (c === '"')  { inQ = true; i++; continue; }
+        if (c === ',')  { row.push(field); field = ''; i++; continue; }
+        if (c === '\n') { row.push(field); if (row.some(function(f){return f;})) rows.push(row); row = []; field = ''; i++; continue; }
+        field += c; i++;
+      }
+    }
+    if (field || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  /* -- escape HTML -- */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* -- map columns by header name, so column order in the sheet doesn't matter.
+        Fields are resolved most-specific-first and each column is claimed only
+        once, so a header like "Areas of interest or experience" can't steal the
+        "Previous ARPA experience" column. -- */
+  var FALLBACK = ['name','affiliation','cohorts','experience','bio','areas','headshot'];
+  var KEYS = [
+    ['headshot',    ['headshot', 'photo', 'image']],
+    ['affiliation', ['affiliation', 'organisation', 'organization']],
+    ['cohorts',     ['cohort']],
+    ['areas',       ['area', 'interest']],
+    ['bio',         ['bio']],
+    ['experience',  ['arpa', 'previous', 'experience']],
+    ['name',        ['name']]
+  ];
+  function mapColumns(header) {
+    var map = {}, claimed = {}, found = 0;
+    for (var f = 0; f < KEYS.length; f++) {
+      var field = KEYS[f][0], words = KEYS[f][1];
+      for (var k = 0; k < words.length && map[field] === undefined; k++) {
+        for (var c = 0; c < header.length; c++) {
+          if (claimed[c]) continue;
+          if (String(header[c]).toLowerCase().indexOf(words[k]) > -1) {
+            map[field] = c; claimed[c] = true; found++; break;
+          }
+        }
+      }
+    }
+    /* header row doesn't look like headers -> fall back to fixed column order */
+    if (found < 3) {
+      map = {};
+      for (var i = 0; i < FALLBACK.length; i++) map[FALLBACK[i]] = i;
+      return map;
+    }
+    for (var j = 0; j < FALLBACK.length; j++) {
+      if (map[FALLBACK[j]] === undefined) map[FALLBACK[j]] = -1;
+    }
+    return map;
+  }
+
+  /* -- cohort string -> filter slugs -- */
+  var PROGRAMS = [
+    ['aria', 'aria'], ['sprind', 'sprind'], ['americas', 'americas'],
+    ['japan', 'japan'], ['ukri', 'ukri'], ['k-health', 'khealth'], ['k health', 'khealth']
+  ];
+  function parseCohorts(raw) {
+    var tokens = String(raw || '').split(',')
+      .map(function(t) { return t.trim(); })
+      .filter(function(t) { return t.length; });
+    var programs = [], years = [];
+    tokens.forEach(function(t) {
+      var low = t.toLowerCase(), slug = null;
+      for (var p = 0; p < PROGRAMS.length; p++) {
+        if (low.indexOf(PROGRAMS[p][0]) > -1) { slug = PROGRAMS[p][1]; break; }
+      }
+      if (!slug) slug = low.replace(/20\d{2}/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      if (slug && programs.indexOf(slug) === -1) programs.push(slug);
+      var yr = low.match(/20\d{2}/);
+      if (yr && years.indexOf(yr[0]) === -1) years.push(yr[0]);
+    });
+    return { tokens: tokens, programs: programs, years: years };
+  }
+
+  /* -- build a card from a CSV row -- */
+  function buildCard(r, map) {
+    function get(f) { var i = map[f]; return (i > -1 && r[i] != null) ? String(r[i]).trim() : ''; }
+
+    var name = get('name');
+    if (!name) return null;
+
+    var affil    = get('affiliation');
+    var cohorts  = parseCohorts(get('cohorts'));
+    var exp      = get('experience');
+    var bio      = get('bio');
+    var areas    = get('areas');
+    var headshot = get('headshot');
+
+    var tagHtml = cohorts.tokens.map(function(t) {
+      return '<span class="bits-mentors__tag">' + esc(t) + '</span>';
+    }).join('');
+
+    var el = document.createElement('article');
+    el.className = 'bits-mentors__card';
+    el.setAttribute('data-programs', cohorts.programs.join(' '));
+    el.setAttribute('data-years', cohorts.years.join(' '));
+    el.setAttribute('data-search', [name, affil, exp, areas, cohorts.tokens.join(' ')].join(' ').toLowerCase());
+    el.innerHTML =
+      '<div class="bits-mentors__card-top">' +
+        '<img src="' + esc(headshot) + '" alt="' + esc(name) + '" loading="lazy">' +
+        '<div>' +
+          '<h2 class="bits-mentors__name">' + esc(name) + '</h2>' +
+          '<span class="bits-mentors__affiliation">' + esc(affil) + '</span>' +
+          '<div class="bits-mentors__tags">' + tagHtml + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="bits-mentors__card-body">' +
+        (exp   ? '<div class="bits-mentors__experience">' + esc(exp) + '</div>' : '') +
+        (areas ? '<p class="bits-mentors__areas">' + esc(areas) + '</p>' : '') +
+      '</div>' +
+      (bio ? '<div class="bits-mentors__card-footer"><button class="bits-mentors__bio-toggle">Bio</button></div>' +
+             '<div class="bits-mentors__bio"><p>' + esc(bio) + '</p></div>' : '');
+    return el;
+  }
+
+  /* -- filters -- */
+  function applyFilters() {
+    var visible = 0;
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var progs = (card.getAttribute('data-programs') || '').split(' ');
+      var years = (card.getAttribute('data-years') || '').split(' ');
+      var matchProg = filters.program === 'all' || progs.indexOf(filters.program) > -1;
+      var matchYear = filters.year    === 'all' || years.indexOf(filters.year)    > -1;
+      var matchQ    = !filters.q || (card.getAttribute('data-search') || '').indexOf(filters.q) > -1;
+      var show = matchProg && matchYear && matchQ;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    }
+    if (countEl) countEl.textContent = 'Showing ' + visible + ' of ' + cards.length + ' mentors';
+    if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  /* -- alphabetical sort by last name -- */
+  function sortGrid() {
+    var arr = Array.prototype.slice.call(cards);
+    arr.sort(function(a, b) {
+      var la = a.querySelector('.bits-mentors__name').textContent.trim().split(' ').pop().toLowerCase();
+      var lb = b.querySelector('.bits-mentors__name').textContent.trim().split(' ').pop().toLowerCase();
+      return la.localeCompare(lb);
+    });
+    arr.forEach(function(c) { grid.appendChild(c); });
+  }
+
+  /* -- pill filters -- */
+  var pills = root.querySelectorAll('.bits-mentors__pill');
+  for (var i = 0; i < pills.length; i++) {
+    pills[i].addEventListener('click', function() {
+      var group = this.getAttribute('data-filter');
+      filters[group] = this.getAttribute('data-value');
+      var siblings = root.querySelectorAll('.bits-mentors__pill[data-filter="' + group + '"]');
+      for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('bits-mentors__pill--active');
+      this.classList.add('bits-mentors__pill--active');
+      applyFilters();
+    });
+  }
+
+  /* -- search box -- */
+  if (searchEl) {
+    searchEl.addEventListener('input', function() {
+      filters.q = this.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  /* -- bio toggle -- */
+  root.addEventListener('click', function(e) {
+    var btn = e.target;
+    if (!btn.classList || !btn.classList.contains('bits-mentors__bio-toggle')) return;
+    var card = btn.closest('.bits-mentors__card');
+    var bio  = card.querySelector('.bits-mentors__bio');
+    bio.classList.toggle('bits-mentors__bio--open');
+    btn.textContent = bio.classList.contains('bits-mentors__bio--open') ? 'Hide Bio' : 'Bio';
+  });
+
+  /* -- URL param auto-filter, e.g. ?program=sprind&year=2026 -- */
+  function applyURLParams() {
+    var params = new URLSearchParams(window.location.search);
+    ['program', 'year'].forEach(function(group) {
+      var v = params.get(group);
+      if (!v) return;
+      var pill = root.querySelector('.bits-mentors__pill[data-filter="' + group + '"][data-value="' + v + '"]');
+      if (pill) pill.click();
+    });
+  }
+
+  /* -- fetch & render -- */
+  if (countEl) countEl.textContent = 'Loading mentors...';
+  fetch(CSV_URL)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      var rows = parseCSV(text);
+      if (!rows.length) throw new Error('empty');
+      var map = mapColumns(rows[0]);
+      rows.slice(1).forEach(function(r) {
+        var card = buildCard(r, map);
+        if (card) grid.appendChild(card);
+      });
+      cards = root.querySelectorAll('.bits-mentors__card');
+      sortGrid();
+      applyURLParams();
+      applyFilters();
+    })
+    .catch(function() {
+      grid.innerHTML = '<p style="opacity:0.5;padding:1rem 0">Could not load mentors data. Please try refreshing.</p>';
+      if (countEl) countEl.textContent = '';
+    });
+})();
+</script>
