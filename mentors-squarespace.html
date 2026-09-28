@@ -9,7 +9,12 @@
         headers: Name | Affiliation | Cohorts | Experience | Bio | Areas | Headshot
      5. "Cohorts" is the multi-select answer, comma-separated exactly as the
         form exports it, e.g.  ARIA PDs, SPRIND 2025, Japan 2026
-        Filter pills and year tags are derived automatically from that string.
+        Cohort tags and the Year filter are derived automatically from that string.
+     6. FILTERS: mentors are organised by Area of expertise and by prior ARPA-style
+        affiliation (read from the Experience column), not by cohort. Both filter
+        lists are built automatically from the sheet -- add a new area or a new
+        agency in the sheet and the pill/dropdown appears on its own.
+     7. Bios are always visible. There is no expand/collapse toggle.
 -->
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
@@ -58,6 +63,10 @@
   margin-bottom: 0;
 }
 
+.bits-mentors__filters--hidden {
+  display: none;
+}
+
 .bits-mentors__filter-label {
   font-size: 0.9rem;
   font-weight: 700;
@@ -91,6 +100,14 @@
   opacity: 1;
 }
 
+.bits-mentors__pill:focus-visible,
+.bits-mentors__select:focus-visible,
+.bits-mentors__search:focus-visible {
+  outline: 2px solid var(--bits-accent);
+  outline-offset: 2px;
+}
+
+.bits-mentors__select,
 .bits-mentors__search {
   font-family: 'Inter', sans-serif;
   font-size: 0.82rem;
@@ -104,6 +121,7 @@
   outline: none;
 }
 
+.bits-mentors__select:focus,
 .bits-mentors__search:focus {
   border-color: var(--bits-accent);
 }
@@ -145,7 +163,7 @@
   width: 64%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center 22%;
   display: block;
   margin: 0 auto;
   border-radius: 50%;
@@ -205,44 +223,15 @@
   font-size: 0.85rem;
   opacity: 0.6;
   line-height: 1.55;
-  margin: 0;
-}
-
-.bits-mentors__card-footer {
-  padding: 0.75rem 0 0;
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.bits-mentors__bio-toggle {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  color: var(--bits-accent);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  padding: 0;
-}
-
-.bits-mentors__bio-toggle:hover {
-  text-decoration: underline;
+  margin: 0 0 0.4rem;
 }
 
 .bits-mentors__bio {
-  display: none;
-  font-size: 0.83rem;
-  opacity: 0.6;
-  line-height: 1.55;
-  padding: 0.6rem 0 0;
-  border-top: 1px solid rgba(0,0,0,0.08);
-  margin-top: 0.6rem;
-}
-
-.bits-mentors__bio--open {
-  display: block;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: #6b6b6b;
+  line-height: 1.6;
+  margin: 0.35rem 0 0;
 }
 
 @media (max-width: 900px) {
@@ -256,6 +245,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+  .bits-mentors__select,
   .bits-mentors__search {
     min-width: 100%;
   }
@@ -268,15 +258,15 @@
   <p class="bits-mentors__program-link"><a href="https://www.renaissancephilanthropy.org/big-if-true-science-accelerator" target="_blank">Learn more about the program</a></p>
 
   <!-- Filter Bar -->
-  <div class="bits-mentors__filters">
-    <span class="bits-mentors__filter-label">Cohort:</span>
-    <button class="bits-mentors__pill bits-mentors__pill--active" data-filter="program" data-value="all">All</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="aria">ARIA</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="sprind">SPRIND</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="americas">Americas</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="japan">Japan</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="ukri">UKRI</button>
-    <button class="bits-mentors__pill" data-filter="program" data-value="khealth">K-Health</button>
+  <div class="bits-mentors__filters bits-mentors__filters--hidden" data-row="area">
+    <span class="bits-mentors__filter-label">Area of expertise:</span>
+    <select class="bits-mentors__select" data-filter="area" aria-label="Filter by area of expertise">
+      <option value="all">All areas</option>
+    </select>
+  </div>
+  <div class="bits-mentors__filters bits-mentors__filters--hidden" data-row="arpa">
+    <span class="bits-mentors__filter-label">Previous ARPA:</span>
+    <button class="bits-mentors__pill bits-mentors__pill--active" data-filter="arpa" data-value="all">All</button>
   </div>
   <div class="bits-mentors__filters">
     <span class="bits-mentors__filter-label">Year:</span>
@@ -309,8 +299,12 @@
   var countEl  = root.querySelector('.bits-mentors__count');
   var emptyEl  = root.querySelector('.bits-mentors__empty');
   var searchEl = root.querySelector('.bits-mentors__search');
-  var filters  = { program: 'all', year: 'all', q: '' };
+  var areaRow  = root.querySelector('[data-row="area"]');
+  var areaSel  = root.querySelector('.bits-mentors__select[data-filter="area"]');
+  var arpaRow  = root.querySelector('[data-row="arpa"]');
+  var filters  = { area: 'all', arpa: 'all', year: 'all', q: '' };
   var cards    = [];
+  var areaIndex = {};   /* slug -> display label */
 
   /* -- CSV parser -- */
   function parseCSV(text) {
@@ -339,6 +333,10 @@
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function slugify(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
 
   /* -- map columns by header name, so column order in the sheet doesn't matter.
@@ -380,27 +378,49 @@
     return map;
   }
 
-  /* -- cohort string -> filter slugs -- */
-  var PROGRAMS = [
-    ['aria', 'aria'], ['sprind', 'sprind'], ['americas', 'americas'],
-    ['japan', 'japan'], ['ukri', 'ukri'], ['k-health', 'khealth'], ['k health', 'khealth']
-  ];
+  /* -- cohort string -> display tags + years (cohorts are shown, not filtered) -- */
   function parseCohorts(raw) {
     var tokens = String(raw || '').split(',')
       .map(function(t) { return t.trim(); })
       .filter(function(t) { return t.length; });
-    var programs = [], years = [];
+    var years = [];
     tokens.forEach(function(t) {
-      var low = t.toLowerCase(), slug = null;
-      for (var p = 0; p < PROGRAMS.length; p++) {
-        if (low.indexOf(PROGRAMS[p][0]) > -1) { slug = PROGRAMS[p][1]; break; }
-      }
-      if (!slug) slug = low.replace(/20\d{2}/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      if (slug && programs.indexOf(slug) === -1) programs.push(slug);
-      var yr = low.match(/20\d{2}/);
+      var yr = t.match(/20\d{2}/);
       if (yr && years.indexOf(yr[0]) === -1) years.push(yr[0]);
     });
-    return { tokens: tokens, programs: programs, years: years };
+    return { tokens: tokens, years: years };
+  }
+
+  /* -- areas of expertise -> filter slugs.
+        Free text in the sheet is split on commas, semicolons and slashes. -- */
+  function parseAreas(raw) {
+    var out = [];
+    String(raw || '').split(/[,;\/]|\u2022/).forEach(function(t) {
+      var label = t.replace(/\s+/g, ' ').trim()
+                   .replace(/^and\s+/i, '')
+                   .replace(/[.]+$/, '')
+                   .trim();
+      if (!label || label.length > 60) return;
+      var slug = slugify(label);
+      if (!slug || out.indexOf(slug) > -1) return;
+      out.push(slug);
+      if (!areaIndex[slug]) areaIndex[slug] = label.charAt(0).toUpperCase() + label.slice(1);
+    });
+    return out;
+  }
+
+  /* -- previous ARPA-style affiliation, read out of the Experience column -- */
+  var AGENCIES = [
+    ['DARPA', /\bdarpa\b/], ['IARPA', /\biarpa\b/], ['ARPA-E', /\barpa-?\s?e\b/],
+    ['ARPA-H', /\barpa-?\s?h\b/], ['ARPA-I', /\barpa-?\s?i\b/], ['HSARPA', /\bhsarpa\b/],
+    ['ARIA', /\baria\b/], ['SPRIND', /\bsprind\b/], ['JST', /\bjst\b/], ['NASA', /\bnasa\b/]
+  ];
+  function parseAgencies(text) {
+    var low = String(text || '').toLowerCase(), out = [];
+    AGENCIES.forEach(function(a) {
+      if (a[1].test(low) && out.indexOf(a[0]) === -1) out.push(a[0]);
+    });
+    return out;
   }
 
   /* -- build a card from a CSV row -- */
@@ -416,6 +436,8 @@
     var bio      = get('bio');
     var areas    = get('areas');
     var headshot = get('headshot');
+    var areaSlugs = parseAreas(areas);
+    var agencies  = parseAgencies(exp);
 
     var tagHtml = cohorts.tokens.map(function(t) {
       return '<span class="bits-mentors__tag">' + esc(t) + '</span>';
@@ -423,9 +445,10 @@
 
     var el = document.createElement('article');
     el.className = 'bits-mentors__card';
-    el.setAttribute('data-programs', cohorts.programs.join(' '));
+    el.setAttribute('data-areas', areaSlugs.join(' '));
+    el.setAttribute('data-arpa', agencies.map(slugify).join(' '));
     el.setAttribute('data-years', cohorts.years.join(' '));
-    el.setAttribute('data-search', [name, affil, exp, areas, cohorts.tokens.join(' ')].join(' ').toLowerCase());
+    el.setAttribute('data-search', [name, affil, exp, areas, bio, cohorts.tokens.join(' ')].join(' ').toLowerCase());
     el.innerHTML =
       '<div class="bits-mentors__card-top">' +
         '<img src="' + esc(headshot) + '" alt="' + esc(name) + '" loading="lazy">' +
@@ -438,10 +461,50 @@
       '<div class="bits-mentors__card-body">' +
         (exp   ? '<div class="bits-mentors__experience">' + esc(exp) + '</div>' : '') +
         (areas ? '<p class="bits-mentors__areas">' + esc(areas) + '</p>' : '') +
-      '</div>' +
-      (bio ? '<div class="bits-mentors__card-footer"><button class="bits-mentors__bio-toggle">Bio</button></div>' +
-             '<div class="bits-mentors__bio"><p>' + esc(bio) + '</p></div>' : '');
+        (bio   ? '<p class="bits-mentors__bio">' + esc(bio) + '</p>' : '') +
+      '</div>';
     return el;
+  }
+
+  /* -- populate the two data-driven filters -- */
+  function buildAreaFilter() {
+    var slugs = Object.keys(areaIndex).sort(function(a, b) {
+      return areaIndex[a].localeCompare(areaIndex[b]);
+    });
+    if (!slugs.length) return;
+    slugs.forEach(function(slug) {
+      var opt = document.createElement('option');
+      opt.value = slug;
+      opt.textContent = areaIndex[slug];
+      areaSel.appendChild(opt);
+    });
+    areaRow.classList.remove('bits-mentors__filters--hidden');
+  }
+
+  function buildArpaFilter() {
+    var present = [];
+    for (var i = 0; i < cards.length; i++) {
+      (cards[i].getAttribute('data-arpa') || '').split(' ').forEach(function(s) {
+        if (s && present.indexOf(s) === -1) present.push(s);
+      });
+    }
+    if (!present.length) return;
+    var order = AGENCIES.map(function(a) { return slugify(a[0]); });
+    present.sort(function(a, b) { return order.indexOf(a) - order.indexOf(b); });
+    present.forEach(function(slug) {
+      var label = slug;
+      for (var i = 0; i < AGENCIES.length; i++) {
+        if (slugify(AGENCIES[i][0]) === slug) { label = AGENCIES[i][0]; break; }
+      }
+      var btn = document.createElement('button');
+      btn.className = 'bits-mentors__pill';
+      btn.setAttribute('data-filter', 'arpa');
+      btn.setAttribute('data-value', slug);
+      btn.textContent = label;
+      arpaRow.appendChild(btn);
+    });
+    arpaRow.classList.remove('bits-mentors__filters--hidden');
+    bindPills(arpaRow.querySelectorAll('.bits-mentors__pill[data-filter="arpa"]'));
   }
 
   /* -- filters -- */
@@ -449,12 +512,14 @@
     var visible = 0;
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
-      var progs = (card.getAttribute('data-programs') || '').split(' ');
+      var areas = (card.getAttribute('data-areas') || '').split(' ');
+      var arpa  = (card.getAttribute('data-arpa')  || '').split(' ');
       var years = (card.getAttribute('data-years') || '').split(' ');
-      var matchProg = filters.program === 'all' || progs.indexOf(filters.program) > -1;
-      var matchYear = filters.year    === 'all' || years.indexOf(filters.year)    > -1;
+      var matchArea = filters.area === 'all' || areas.indexOf(filters.area) > -1;
+      var matchArpa = filters.arpa === 'all' || arpa.indexOf(filters.arpa)  > -1;
+      var matchYear = filters.year === 'all' || years.indexOf(filters.year) > -1;
       var matchQ    = !filters.q || (card.getAttribute('data-search') || '').indexOf(filters.q) > -1;
-      var show = matchProg && matchYear && matchQ;
+      var show = matchArea && matchArpa && matchYear && matchQ;
       card.style.display = show ? '' : 'none';
       if (show) visible++;
     }
@@ -474,14 +539,24 @@
   }
 
   /* -- pill filters -- */
-  var pills = root.querySelectorAll('.bits-mentors__pill');
-  for (var i = 0; i < pills.length; i++) {
-    pills[i].addEventListener('click', function() {
-      var group = this.getAttribute('data-filter');
-      filters[group] = this.getAttribute('data-value');
-      var siblings = root.querySelectorAll('.bits-mentors__pill[data-filter="' + group + '"]');
-      for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('bits-mentors__pill--active');
-      this.classList.add('bits-mentors__pill--active');
+  function bindPills(list) {
+    for (var i = 0; i < list.length; i++) {
+      list[i].addEventListener('click', function() {
+        var group = this.getAttribute('data-filter');
+        filters[group] = this.getAttribute('data-value');
+        var siblings = root.querySelectorAll('.bits-mentors__pill[data-filter="' + group + '"]');
+        for (var j = 0; j < siblings.length; j++) siblings[j].classList.remove('bits-mentors__pill--active');
+        this.classList.add('bits-mentors__pill--active');
+        applyFilters();
+      });
+    }
+  }
+  bindPills(root.querySelectorAll('.bits-mentors__pill'));
+
+  /* -- area dropdown -- */
+  if (areaSel) {
+    areaSel.addEventListener('change', function() {
+      filters.area = this.value;
       applyFilters();
     });
   }
@@ -494,25 +569,20 @@
     });
   }
 
-  /* -- bio toggle -- */
-  root.addEventListener('click', function(e) {
-    var btn = e.target;
-    if (!btn.classList || !btn.classList.contains('bits-mentors__bio-toggle')) return;
-    var card = btn.closest('.bits-mentors__card');
-    var bio  = card.querySelector('.bits-mentors__bio');
-    bio.classList.toggle('bits-mentors__bio--open');
-    btn.textContent = bio.classList.contains('bits-mentors__bio--open') ? 'Hide Bio' : 'Bio';
-  });
-
-  /* -- URL param auto-filter, e.g. ?program=sprind&year=2026 -- */
+  /* -- URL param auto-filter, e.g. ?area=synthetic-biology&arpa=darpa&year=2026 -- */
   function applyURLParams() {
     var params = new URLSearchParams(window.location.search);
-    ['program', 'year'].forEach(function(group) {
+    ['arpa', 'year'].forEach(function(group) {
       var v = params.get(group);
       if (!v) return;
       var pill = root.querySelector('.bits-mentors__pill[data-filter="' + group + '"][data-value="' + v + '"]');
       if (pill) pill.click();
     });
+    var area = params.get('area');
+    if (area && areaSel && areaSel.querySelector('option[value="' + area + '"]')) {
+      areaSel.value = area;
+      filters.area = area;
+    }
   }
 
   /* -- fetch & render -- */
@@ -529,6 +599,8 @@
       });
       cards = root.querySelectorAll('.bits-mentors__card');
       sortGrid();
+      buildAreaFilter();
+      buildArpaFilter();
       applyURLParams();
       applyFilters();
     })
